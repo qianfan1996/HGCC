@@ -47,4 +47,4 @@ Take CMU-MOSI as an example, you can train and test the model at once via:
 ```
 
 ## Acknowledgement
-We knowledge [this great repository](https://github.com/lzjjeff/HGraph-CL) for reference.
+We acknowledge [this great repository](https://github.com/lzjjeff/HGraph-CL) for reference.
