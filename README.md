@@ -2,7 +2,7 @@
 
 Code for the paper: Hierarchical Graph Capsule Contrastive Learning for Unaligned Multimodal Language Sequences
 
-![Framework of HGCC](./imgs/framework.jpg)
+![Framework of HGCC](./imgs/framework.pdf)
 
 
 
