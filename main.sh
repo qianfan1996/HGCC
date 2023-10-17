@@ -10,7 +10,7 @@ CUDA_VISIBLE_DEVICES=1 python run.py \
     --seeds 0 1 2 3 10 11 42 66 100 111 222 333 520 666 888 1000 1111 2022 2023 \
     --do_train \
     --do_predict \
-    --save_path ./saved_results/${DATASET}/ \
+    --save_path ./saved_results/${DATASET}/our/ \
     --device_ids 0 \
     --epoch 20 \
     --lr_bert 1e-5 \
