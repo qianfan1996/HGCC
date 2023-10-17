@@ -1,6 +1,6 @@
 # Introduction
 
-Code for the paper: Hierarchical Graph Capsule Contrastive Learning for Unaligned Multimodal Language Sequences
+Code for the paper: Capturing High-level Semantic Correlations via Graph for Multimodal Sentiment Analysis
 
 ![Framework of HGCC](./imgs/framework.jpg)
 
@@ -10,6 +10,7 @@ Code for the paper: Hierarchical Graph Capsule Contrastive Learning for Unaligne
 
 * PyTorch 1.8.0+cu111
 * transformers 4.18.0
+
 You can install the required packages with the following command
 ```python
 pip install -r requirements.txt
