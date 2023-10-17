@@ -2,7 +2,7 @@
 
 export DATASET=mosi
 
-CUDA_VISIBLE_DEVICES=0 python run.py \
+CUDA_VISIBLE_DEVICES=1 python run.py \
     --dataset ${DATASET} \
     --batch_size 24 \
     --max_len 128 \
@@ -26,10 +26,5 @@ CUDA_VISIBLE_DEVICES=0 python run.py \
     --aug_ratio 0.2 \
     --sup_cl_weight 0.1 \
     --self_cl_weight 0.1 \
-    --capsule_dim 128 \
-    --capsule_num 40 \
-    --routing 3 \
-    --multi_dim 128 \
-    --Tt 128 \
-    --Ta 375 \
-    --Tv 500
+    --intra_cl_weight 0.1 \
+    --inter_cl_weight 0.1

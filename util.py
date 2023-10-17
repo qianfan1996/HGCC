@@ -15,7 +15,11 @@ def get_argparse():
     parser.add_argument("--seeds", type=int, nargs='+', default=[0])
     parser.add_argument("--device_ids", type=int, nargs='+', default=[0])
 
-    parser.add_argument("--save_path", type=str, default="./saved_results/mosi/")
+    parser.add_argument("--save_path", type=str, choices=["./saved_results/mosi/our/","./saved_results/mosi/our_remove_unimodal_reprs/",
+                                                          "./saved_results/mosi/our_remove_intra/", "./saved_results/mosi/our_remove_inter/",
+                                                          "./saved_results/mosi/our_remove_intra_inter/", "./saved_results/mosi/our_remove_dr/",
+                                                          "./saved_results/mosi/HGraph-CL/"],
+                        default="./saved_results/mosi/our/")
     parser.add_argument("--epoch", type=int, default=20)
     parser.add_argument("--lr_bert", type=float, default=5e-6)
     parser.add_argument("--lr_other", type=float, default=1e-4)
@@ -24,6 +28,8 @@ def get_argparse():
     parser.add_argument("--temperature", type=float, default=0.07)
     parser.add_argument("--sup_cl_weight", type=float, default=0.1)
     parser.add_argument("--self_cl_weight", type=float, default=0.1)
+    parser.add_argument("--intra_cl_weight", type=float, default=0.1)
+    parser.add_argument("--inter_cl_weight", type=float, default=0.1)
 
     # model parameters
     parser.add_argument("--hidden_size", type=int, default=256)
@@ -37,7 +43,7 @@ def get_argparse():
     parser.add_argument("--dropout_gnn", type=float, default=0.1)
     parser.add_argument("--aug_ratio", type=float, default=0.1)
     parser.add_argument("--capsule_dim", type=int, default=128)
-    parser.add_argument("--capsule_num", type=int, default=40)
+    parser.add_argument("--capsule_num", type=int, default=10)
     parser.add_argument("--routing", type=int, default=3)
     parser.add_argument("--multi_dim", type=int, default=128)
     parser.add_argument("--Tt", type=int, default=128)
@@ -98,6 +104,8 @@ def get_config_from_args(args):
     config["temperature"] = args.temperature
     config["sup_cl_weight"] = args.sup_cl_weight
     config["self_cl_weight"] = args.self_cl_weight
+    config["intra_cl_weight"] = args.intra_cl_weight
+    config["inter_cl_weight"] = args.inter_cl_weight
     config['capsule_dim'] = args.capsule_dim
     config['capsule_num'] = args.capsule_num
     config['routing'] = args.routing
@@ -114,6 +122,9 @@ config = get_config_from_args(args)
 
 device = torch.device("cuda:%s" % config["device_ids"][0]) if torch.cuda.is_available() else "cpu"
 
+str_config = "\n"+str(config)+"\n"
+with open("./saved_results/results.txt","a") as file:
+    file.write(str_config)
 
 class ResultRecoder:
     def __init__(self, name):

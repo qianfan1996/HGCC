@@ -3,6 +3,8 @@ import yaml
 import time
 from tqdm import tqdm
 
+# os.environ["TRANSFORMERS_CACHE"] = "/root/.cache/huggingface/transformers"
+
 import random
 import pandas as pd
 import numpy as np
@@ -17,7 +19,6 @@ from util import config, device, ResultRecoder
 from metrics import mosei_metrics, mosei_metrics_with_zero
 from read_data import get_dataloader
 from losses import SupConLoss
-
 
 def batch_fit(batch, model, loss_func, mode='train'):
     """ 模型 batch 处理,
@@ -53,7 +54,8 @@ def batch_fit(batch, model, loss_func, mode='train'):
         cl_loss = sup_cl_loss + self_cl_loss
         intra_loss = sup_cl_loss_t + sup_cl_loss_v + sup_cl_loss_a + self_cl_loss_t + self_cl_loss_v + self_cl_loss_a
         inter_loss = sup_cl_loss_m + self_cl_loss_m
-        loss = regre_loss + sup_cl_loss * config["sup_cl_weight"] + self_cl_loss * config["self_cl_weight"]
+        # loss = regre_loss + sup_cl_loss * config["sup_cl_weight"] + self_cl_loss * config["self_cl_weight"]
+        loss = regre_loss + intra_loss * config["intra_cl_weight"] + inter_loss * config["inter_cl_weight"]
         return loss, [regre_loss, cl_loss, sup_cl_loss, sup_cl_loss_m, sup_cl_loss_t, sup_cl_loss_v, sup_cl_loss_a,
                       self_cl_loss, self_cl_loss_m, self_cl_loss_t, self_cl_loss_v, self_cl_loss_a, intra_loss, inter_loss],\
                y_pred, y, [reps_m, reps_t, reps_v, reps_a, reps_m_aug, reps_t_aug, reps_v_aug, reps_a_aug], batch_size
@@ -283,6 +285,13 @@ def predict(test_loader, model, regre_loss_func):
         fo.write("\nTest loss: %s\nTest set acc_7 is %s\nTest set acc_5 is %s\nTest set acc2 is %s\n"
                  "Test set f1 score is %s\nTest set MAE is %s\nTest set Corr is %s\n"
                  % (round(test_regre_loss, 4), _acc7, _acc5, _acc2, _f1, _mae, _corr))
+
+    results = ["acc7: {}\n".format(acc7), "acc5: {}\n".format(acc5), "acc2: {}\n".format(acc2), "F1: {}\n".format(f1),
+               "MAE: {}\n".format(mae), "corr: {}\n".format(corr), "acc7 with zero: {}\n".format(_acc7), "acc5 with zero: {}\n".format(_acc5),
+               "acc2 with zero: {}\n".format(_acc2), "F1 with zero: {}\n".format(_f1), "MAE with zero: {}\n".format(_mae),
+               "corr with zero: {}\n".format(_corr), "-"*100+"\n"]
+    with open("./saved_results/results.txt","a") as file:
+        file.writelines(results)
 
     # 保存预测结果
     pd.DataFrame({"pred": y_pred, "true": y_true}).to_csv(os.path.join(config["save_path"], 'predict_score.csv'))
