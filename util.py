@@ -187,3 +187,15 @@ class EpochScheduler:
                 return -1    # 停止信号
             else:
                 return 0   # 继续
+
+
+def get_parameter_number(model):
+    total_num = sum(p.numel() for p in model.parameters())
+    trainable_num = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    return total_num, trainable_num
+
+
+def get_flops(model, *input):
+    macs, num_params = profile(model, input, verbose=False)
+    macs, num_params = clever_format([macs, num_params], '%.3f')
+    return macs, num_params
