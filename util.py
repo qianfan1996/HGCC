@@ -42,7 +42,7 @@ def get_argparse():
     parser.add_argument("--dropout_a", type=float, default=0.0)
     parser.add_argument("--dropout_gnn", type=float, default=0.1)
     parser.add_argument("--aug_ratio", type=float, default=0.1)
-    parser.add_argument("--capsule_dim", type=int, default=128)
+    parser.add_argument("--capsule_dim", type=int, default=32)
     parser.add_argument("--capsule_num", type=int, default=10)
     parser.add_argument("--routing", type=int, default=3)
     parser.add_argument("--multi_dim", type=int, default=128)
